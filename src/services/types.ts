@@ -3,6 +3,7 @@ export interface Task {
   title: string;
   completed: boolean;
   userId: number;
+  user: User;
 }
 
 export interface User {

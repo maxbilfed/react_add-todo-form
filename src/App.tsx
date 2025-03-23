@@ -7,7 +7,18 @@ import { useState } from 'react';
 import { Task } from './services/types';
 
 export const App = () => {
-  const [todoList, setTodoList] = useState<Task[]>(todosFromServer);
+  const preparedTodos = todosFromServer.map(todo => {
+    const todoUser = usersFromServer.find(user => user.id === todo.userId) || {
+      id: 0,
+      name: 'Unknown User',
+      username: 'unknown',
+      email: 'unknown@example.com',
+    };
+
+    return { ...todo, user: todoUser };
+  });
+
+  const [todoList, setTodoList] = useState<Task[]>(preparedTodos);
 
   const [title, setTitle] = useState('');
   const [titleHasIssue, setTitleHasIssue] = useState(false);
@@ -42,6 +53,12 @@ export const App = () => {
         title: title,
         userId: userId,
         completed: false,
+        user: usersFromServer.find(user => user.id === userId) || {
+          id: 0,
+          name: 'Unknown User',
+          username: 'unknown',
+          email: 'unknown@example.com',
+        },
       },
     ]);
 
